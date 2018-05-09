@@ -15,7 +15,7 @@
 		url(r,view,kwargs,name,prefix)
 		{
 			r"^user"  正则表达式 支持参数获取
-			View      调用的Action
+			View(TemplateView)      调用的Action [模板Response.md][View.md]
 			karags    自定义参数传递给Action
 			name      指定别名 用于反向获取url
 		}
@@ -27,6 +27,11 @@
 				A(reques):pass
 				B(request,aa,bb):pass
 				C:(request,name=""):pass
+		View:
+			函数视图 def A(req):pass
+			路径视图 "app.xx.oo.funcname"
+			类视图 View 见[View.md]
+			
 		karags
 			url(r"^login/$",View,{name:xx,...},name="")
 				Ac(request,name,...):pass

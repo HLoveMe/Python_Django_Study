@@ -60,37 +60,22 @@
 			]
 	详细说明 (urls.md)
 	```
-	
-* 模板渲染  [模板文件.md]
+* Request[]
+
+* 响应 HttpResponse [HttpResponse.md]
 
 	```
 	from django.shortcuts import render_to_response
 	from django.shortcuts import render
-	
 	render是render_to_response的快捷方式
 	
+	Return Response响应
+例子(模板响应):
+
 	return render_to_response('blog_add.html',{'blog': blog, 'form': form, 'id': id, 'tag': tag},
                           context_instance=RequestContext(request))
 
 	return render(request, 'blog_add.html', {'blog': blog, 'form': form, 'id': id, 'tag': tag})
-	{
-		强求参数 request, 
-		模板路径 template_name, 
-		渲染参数 context=None,
-		——————— context_instance=_context_instance_undefined,
-		文档类型 content_type=None, 
-		响应状态 status=None, 
-		current_app=_current_app_undefined,
-		dirs=_dirs_undefined,
-		dictionary=_dictionary_undefined,
-		引擎名称 using=None
-	}	
-		
 	
-	from django.template import Context, Template
-	let tem = Template("My name is {% name %}")
-	let con = Context({name:"ZZH"})
-  	u =  tem.render(con)
-		
 	```
-* 响应 HttpResponse
+

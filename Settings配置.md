@@ -1,4 +1,10 @@
 # Setting配置
+* DEBUG 会把错误信息直接返回给前段
+
+* BASE_DIR  执行项目更目录
+
+* ROOT_URLCONF urls根目录文件 
+
 * 数据库配置
 
 	```
@@ -21,7 +27,7 @@
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
         		os.path.join(BASE_DIR, 'templates'),
-        		"其他路径"
+        		"其他路径模板方法路径"
         	],
         'APP_DIRS': True,
         'OPTIONS': {

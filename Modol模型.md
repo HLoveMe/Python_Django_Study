@@ -25,6 +25,8 @@ class USerMessage(models.Modal):
 		return self.type+":"+self.name
 	def__str__(self):
 		return self.type+":"+self.name
+	def get_absolute_url():
+		return "相对|绝对url" admin | resolve_url | redirect 使用得到该model访问地址	
 		
 	class Meta: (内部类指明一些属性)
 		abstract = true/false是否为抽象类
