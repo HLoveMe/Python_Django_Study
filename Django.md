@@ -16,7 +16,7 @@
 * Setting数据库配置
 
 	```
-		> 安装mysql驱动 pip install MySQL-python
+		> 安装mysql驱动 pip install MySQL-python PyMySQL
 		> Setting.md 正确配置mysql
 		> Run Manage.py Task(如果没有初始化就会报错)
 		> 初始化数据库 (数据库操作.md)
@@ -25,8 +25,10 @@
 * 静态文件路径配置 static 文件夹路径
 	* Settings.md 静态文件路径配置
 	* js/css/images
+	
 * 模板文件配置
 	* settings.md
+	
 * 创建App
 	* pyCharm Tools -> Run manang.py Task
 	* startapp AAA

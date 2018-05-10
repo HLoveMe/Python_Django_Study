@@ -127,21 +127,21 @@ class BaseListView(MultipleObjectMixin, View):
 	2：指定模板 参数指定
 	3：重写get_context_data等需要重写方法
 	
-	A:url(r'^blog/(?P<pk>\d+)/$', BlogDetailView.as_view(
+	A:url(r'^blog/(?P<pk>\d+)/(?P<slug>[-_\w]+)/$', BlogDetailView.as_view(
 		设置类属性
 	), name='detail'),  
-	B:url(r'^ blog/(\d+)/$', BlogDetailView.as_view(
+	B:url(r'^ blog/(\d+)/(?P<slug>[-_\w]+)/$', BlogDetailView.as_view(
 		设置类属性
 	), name='detail')  
-	* 如果使用默认 这里的参数名 只能用pk | sulg 这里pk指的查询主键
+	* 如果使用默认 这里的参数名 pk | sulg 这里系统默认pk指的查询主键
 	* 自定义
 		1:
 			pk_url_kwarg = "IDD"
-			url(r'^blog/(?P<IDD>\d+)/$', BlogDetailView.as_view(), name='detail'),
+			url(r'^blog/(?P<IDD>\d+)/(?P<slug>[-_\w]+)/$', BlogDetailView.as_view(), name='detail'),
 			其他代码无需修改
 		2:
 			IDD_URL_KWarg = "MYID"
-			url(r'^blog/(?P<MYID>\d+)/$', BlogDetailView.as_view(), name='detail'),
+			url(r'^blog/(?P<MYID>\d+)/(?P<slug>[-_\w]+)/$', BlogDetailView.as_view(), name='detail'),
 			获取参数
 			MYID =self.kwargs.get(self.IDD_URL_KWarg,None)
 	
@@ -179,21 +179,21 @@ class BaseListView(MultipleObjectMixin, View):
 	2：指定模板 参数指定
 	3：重写get_context_data等需要重写方法
 	
-	A:url(r'^blog/(?P<pk>\d+)/$', BlogDetailView.as_view(
+	A:url(r'^blog/(?P<pk>\d+)/(?P<slug>[-_\w]+)/$', BlogDetailView.as_view(
 		设置类属性
 	), name='detail'),  
-	B:url(r'^ blog/(\d+)/$', BlogDetailView.as_view(
+	B:url(r'^ blog/(\d+)/(?P<slug>[-_\w]+)/$', BlogDetailView.as_view(
 		设置类属性
 	), name='detail')  
-	* 如果使用默认 这里的参数名 只能用pk | sulg 这里pk指的查询主键
+	* 如果使用默认 这里的参数名 pk | sulg 这里系统默认pk指的查询主键
 	* 自定义
 		1:
 			pk_url_kwarg = "IDD"
-			url(r'^blog/(?P<IDD>\d+)/$', BlogListView.as_view(), name='list'),
+			url(r'^blog/(?P<IDD>\d+)/(?P<slug>[-_\w]+)/$', BlogListView.as_view(), name='list'),
 			其他代码无需修改
 		2:
 			IDD_URL_KWarg = "MYID"
-			url(r'^blog/(?P<MYID>\d+)/$', BlogListView.as_view(), name='list'),
+			url(r'^blog/(?P<MYID>\d+)/(?P<slug>[-_\w]+)/$', BlogListView.as_view(), name='list'),
 			获取参数
 			MYID =self.kwargs.get(self.IDD_URL_KWarg,None)
 	

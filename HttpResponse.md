@@ -5,7 +5,7 @@
 > from django.http import HttpResponse,HttpResponseRedirect
 
 ```
-	每一个request 都要进行对于的响应
+每一个request 都要进行对于的响应
 	
 HttpResponse
 	最基础的响应
