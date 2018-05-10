@@ -203,17 +203,7 @@ class BaseListView(MultipleObjectMixin, View):
 		//context_object_name = 'persons'
 		paginate_by = 10  分页个数
        page_kwarg = 'page'  页码参数名
-		def get_object(self,queryset=None):
-			 //pnum=int(self.kwargs.get(self.IDD_URL_KWarg,None))  
-	        query=self.get_queryset()  
-	        try:  
-	            obj=query[pnum-1]
-	        except IndexError:  
-	            raise Http404  
-	        return obj  
-	        {
-	        object = super(AuthorDetailView, self).get_object()  这里是使用 PK 字段        	object.last_accessed = timezone.now()    另外操作        	object.save()        	return object
-        	}
+
 	   	def get_queryset(self):
 	   		return super(UserListView,self).get_queryset()
 	        
