@@ -105,21 +105,7 @@ class BaseListView(MultipleObjectMixin, View):
     }
     url(r'^go-to-django/$', RedirectView.as_view(url=., permanent=.), name='go-to-django'),
 	```
-* DetailView | ListView参数说明
 
-	```	
-	默认参数名	
-		pk_url_kwarg = "pk"
-		slug_url_kwarg = "slug"
-			XX_url_kwarg 表示["slug","pk"]重url正则表达式中获取
-			
-		page_kwarg = "page"
-			XX_kwargs 表示[page]从请求参数中得到
-			
-	自定义的
-		看你自己获取 self.kwargs	
-		
-	```
 * DetailView(SingleObjectTemplateResponseMixin, BaseDetailView): 仅仅展示一条数据
 
 	```
@@ -128,10 +114,10 @@ class BaseListView(MultipleObjectMixin, View):
 	3：重写get_context_data等需要重写方法
 	
 	A:url(r'^blog/(?P<pk>\d+)/(?P<slug>[-_\w]+)/$', BlogDetailView.as_view(
-		设置类属性
+		设置类属性model = BlogModal
 	), name='detail'),  
 	B:url(r'^ blog/(\d+)/(?P<slug>[-_\w]+)/$', BlogDetailView.as_view(
-		设置类属性
+		设置类属性model = BlogModal
 	), name='detail')  
 	* 如果使用默认 这里的参数名 pk | sulg 这里系统默认pk指的查询主键
 	* 自定义
@@ -150,6 +136,7 @@ class BaseListView(MultipleObjectMixin, View):
 		template_name = "blog_detail.html"
 		//context_object_name = 'persons'
 		def get_object(self,queryset=None):
+			参数获取 self.kwargs.xxx
 			 //pnum=int(self.kwargs.get(self.IDD_URL_KWarg,None))  
 	        query=self.get_queryset()  
 	        try:  
@@ -161,10 +148,11 @@ class BaseListView(MultipleObjectMixin, View):
 	        object = super(AuthorDetailView, self).get_object()  这里是使用 PK 字段        	object.last_accessed = timezone.now()    另外操作        	object.save()        	return object
         	}
 	   	def get_queryset(self):
-	   		return super(UserListView,self).get_queryset()
+	   		return super(AuthorDetailView,self).get_queryset()
 	        
     	def get_context_data(self,**kwargs):  
-        	context=DetailView.get_context_data(self,**kwargs)  
+        	context=super(AuthorDetailView,self).get_context_data(**kwargs) 
+        	参数获取 self.kwargs.xxx
         	return context  
 	
 		
@@ -179,11 +167,11 @@ class BaseListView(MultipleObjectMixin, View):
 	2：指定模板 参数指定
 	3：重写get_context_data等需要重写方法
 	
-	A:url(r'^blog/(?P<pk>\d+)/(?P<slug>[-_\w]+)/$', BlogDetailView.as_view(
-		设置类属性
+	A:url(r'^blog/(?P<pk>\d+)/(?P<page>\d+)/$', BlogDetailView.as_view(
+		设置类属性  model = BlogModal
 	), name='detail'),  
-	B:url(r'^ blog/(\d+)/(?P<slug>[-_\w]+)/$', BlogDetailView.as_view(
-		设置类属性
+	B:url(r'^ blog/(\d+)/(?P<slug>[-_\w]+)/?page=100', BlogDetailView.as_view(
+		设置类属性 model = BlogModal
 	), name='detail')  
 	* 如果使用默认 这里的参数名 pk | sulg 这里系统默认pk指的查询主键
 	* 自定义
@@ -197,18 +185,19 @@ class BaseListView(MultipleObjectMixin, View):
 			获取参数
 			MYID =self.kwargs.get(self.IDD_URL_KWarg,None)
 	
-	class BlogListView(DetailView):
+	class BlogListView(ListView):
 		model = BlogModal
 		template_name = "blog_detail.html"
 		//context_object_name = 'persons'
 		paginate_by = 10  分页个数
-       page_kwarg = 'page'  页码参数名
-
+       page_kwarg = 'page'  页码参数名 url参数 或者 截取
+		
 	   	def get_queryset(self):
 	   		return super(UserListView,self).get_queryset()
 	        
     	def get_context_data(self,**kwargs):  
-        	context= super(UserListView,self).get_context_data(self,**kwargs)  
+        	context= super(UserListView,self).get_context_data(**kwargs)  
+        	参数获取 self.kwargs.xxx
         	return context 
 	```
 	![](./ListV.png)
