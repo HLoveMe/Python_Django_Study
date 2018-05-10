@@ -161,7 +161,7 @@ class BaseListView(MultipleObjectMixin, View):
 	        object = super(AuthorDetailView, self).get_object()  这里是使用 PK 字段        	object.last_accessed = timezone.now()    另外操作        	object.save()        	return object
         	}
 	   	def get_queryset(self):
-	   		return supre.get_queryset()
+	   		return super(UserListView,self).get_queryset()
 	        
     	def get_context_data(self,**kwargs):  
         	context=DetailView.get_context_data(self,**kwargs)  
@@ -215,10 +215,10 @@ class BaseListView(MultipleObjectMixin, View):
 	        object = super(AuthorDetailView, self).get_object()  这里是使用 PK 字段        	object.last_accessed = timezone.now()    另外操作        	object.save()        	return object
         	}
 	   	def get_queryset(self):
-	   		return supre.get_queryset()
+	   		return super(UserListView,self).get_queryset()
 	        
     	def get_context_data(self,**kwargs):  
-        	context= super().get_context_data(self,**kwargs)  
+        	context= super(UserListView,self).get_context_data(self,**kwargs)  
         	return context 
 	```
 	![](./ListV.png)
