@@ -34,6 +34,9 @@ class SingleObjectMixin(ContextMixin):
     pk_url_kwarg = 'pk' 默认参数名称 url匹配参数
     query_pk_and_slug = False
     
+    pk 是Django进行主键查询的依据  url匹配提供就可
+    
+    
     def get_object(self, queryset=None):
     	get_queryset中获取
     	自定义查询
