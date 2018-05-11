@@ -19,7 +19,6 @@
 		}
 	```
 * 模板文件配置
-	* 工程目录下的templates文件夹存放html文件
 	
 	```
 	TEMPLATES = [
@@ -46,10 +45,19 @@
 	```
 		解决js css images
 		STATIC_URL = '/static/'
+		STATIC_ROOT = os.path.join(BASE_DIR,'static')
 		STATICFILES_DIRS = [
 		    os.path.join(BASE_DIR,"static"),
 		    ...
+		    公用的
+		    os.path.join(BASE_DIR,"common"),jq...
 		]
+	```
+* Media 配置
+
+	```
+	MEDIA_URL = '/media/'
+	MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 	```
 * App配置
 	
@@ -72,4 +80,9 @@
 		全局事务（可选）
 		ATOMIC_REQUESTS = True
 		
+	```
+* User继承AbstractUser之后配置
+	
+	```
+		AUTH_USER_MODEL = 'Users.UserProfile' "APPName.userName 不需要models"
 	```

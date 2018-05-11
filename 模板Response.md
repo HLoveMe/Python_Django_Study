@@ -3,11 +3,16 @@
 * 模板文件配置
 	* Setting.md 模板路径配置
 * 模板数据来源
-	* {% csrf_token %}
 	* {% url 'urlname' args1 args2 ... %}
 	* {{ name }}
 	* ...
 	* render(context参数)
+	* 系统内置 processors
+		* {% csrf_token %}
+		* {% STATIC_URL %}
+		* {% MEDIA_URL %}
+		* {% request %}
+		* {% 自定义啊 %}
 * 内置函数
 	
 	```

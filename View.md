@@ -74,6 +74,25 @@ class BaseListView(MultipleObjectMixin, View):
 
 视图
 
+* DetailView | ListView | TemplateView | RedirectView 参数解释
+
+	```
+	参数
+		context_object_name
+		paginate_by
+		model
+	设置渠道
+		> 类内部设置
+		> as_View(xx=xx)
+		> url匹配
+	自定义 （不推荐修改变量名称  仅仅修改 变量的值）
+		pk_url_kwarg = "pk" 
+		系统使用 pk_url_kwarg 得到 "pk" 使用self.kwargs.pk的值 作为组件的值进行查询
+		修改 pk_url_kwarg = "id" 你就需要url匹配id值 作为主键的值
+		
+	
+	```
+
 * TemplateView(TemplateResponseMixin, ContextMixin, View):
 	
 	```
@@ -119,15 +138,12 @@ class BaseListView(MultipleObjectMixin, View):
 	B:url(r'^ blog/(\d+)/(?P<slug>[-_\w]+)/$', BlogDetailView.as_view(
 		设置类属性model = BlogModal
 	), name='detail')  
-	* 如果使用默认 这里的参数名 pk | sulg 这里系统默认pk指的查询主键
+	* 如果使用默认 这里的参数名 pk | sulg 这里系统默认pk的值进行查询主键
 	* 自定义
 		1:
 			pk_url_kwarg = "IDD"
 			url(r'^blog/(?P<IDD>\d+)/(?P<slug>[-_\w]+)/$', BlogDetailView.as_view(), name='detail'),
-			其他代码无需修改
-		2:
-			IDD_URL_KWarg = "MYID"
-			url(r'^blog/(?P<MYID>\d+)/(?P<slug>[-_\w]+)/$', BlogDetailView.as_view(), name='detail'),
+		
 			获取参数
 			MYID =self.kwargs.get(self.IDD_URL_KWarg,None)
 	
@@ -137,7 +153,6 @@ class BaseListView(MultipleObjectMixin, View):
 		//context_object_name = 'persons'
 		def get_object(self,queryset=None):
 			参数获取 self.kwargs.xxx
-			 //pnum=int(self.kwargs.get(self.IDD_URL_KWarg,None))  
 	        query=self.get_queryset()  
 	        try:  
 	            obj=query[pnum-1]
@@ -173,16 +188,13 @@ class BaseListView(MultipleObjectMixin, View):
 	B:url(r'^ blog/(\d+)/(?P<slug>[-_\w]+)/?page=100', BlogDetailView.as_view(
 		设置类属性 model = BlogModal
 	), name='detail')  
-	* 如果使用默认 这里的参数名 pk | sulg 这里系统默认pk指的查询主键
+	* 如果使用默认 这里的参数名 pk | sulg 这里系统默认pk的值进行查询主键
 	* 自定义
 		1:
 			pk_url_kwarg = "IDD"
 			url(r'^blog/(?P<IDD>\d+)/(?P<slug>[-_\w]+)/$', BlogListView.as_view(), name='list'),
 			其他代码无需修改
-		2:
-			IDD_URL_KWarg = "MYID"
-			url(r'^blog/(?P<MYID>\d+)/(?P<slug>[-_\w]+)/$', BlogListView.as_view(), name='list'),
-			获取参数
+		
 			MYID =self.kwargs.get(self.IDD_URL_KWarg,None)
 	
 	class BlogListView(ListView):
@@ -190,7 +202,7 @@ class BaseListView(MultipleObjectMixin, View):
 		template_name = "blog_detail.html"
 		//context_object_name = 'persons'
 		paginate_by = 10  分页个数
-       page_kwarg = 'page'  页码参数名 url参数 或者 截取
+       page_kwarg = 'page'  页码参数名 url参数 或者 截取url
 		
 	   	def get_queryset(self):
 	   		return super(UserListView,self).get_queryset()

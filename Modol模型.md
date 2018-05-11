@@ -10,6 +10,8 @@ from django.db import models
 class USerMessage(models.Modal):
 	id =  AutoField
 	多表关联
+		一对一
+			OntoOneField()
 		一对多（部门Dep  -- n消息Msg）
 			class Dep:
 				pass
@@ -34,7 +36,7 @@ class USerMessage(models.Modal):
 		app_label= "APPName 指定是哪个App下"
 		db_table = "自定义表名"
 		verbose_name = "为你的类取个理解的名字"
-		verbose_name_plural = "" 复数形式名称 默认加个 s
+		verbose_name_plural = verbose_name 复数形式名称 默认加个 s
 		ordering = "-id" 排序
 		...
 		pass
@@ -44,10 +46,30 @@ class USerMessage(models.Modal):
 >  创建或更新 makemigrations appname
 >  创建或更新 migrate appname
 ```
+* 属性
+	
+	```
+	属性如果传递的是函数 只需要传递地址
+		def up_to(req,imgF):
+			return XX
+		from datetime import datetime
+		//datetime.new()
+		ImageField(upload_to=up_to,default = datetime.new)
+		
+	图片
+		ImageField(
+			upload_to{
+				"硬编码"  "icon/" ==> "mediaP/icon/filename"
+				strftime "icon/%Y/%m/%d" "mediaP/icon/年/月/日/fileName"
+				func -> path def upload_to(instance, fielname):pass
+			}
+		)
+		
+	```
 	
 * 数据库操作 [事务](https://blog.csdn.net/ysjian_pingcx/article/details/51015988)----[OCRD](https://www.cnblogs.com/shizhengwen/p/6588834.html)
 
-```
+	```
 操作器
 	Students.objects | stu.XX_set
 多表关联
@@ -72,43 +94,43 @@ class USerMessage(models.Modal):
 			with transaction.atomic():
 				...
 			
-增删改查
-增:
-	obj.save()
-	Object.create(name=,age=)
-	关联
-		正向 person.book.add(book)
-		逆向 book.person_set.add(person)
-删:
-	Publisher.objects.get(name="O'Reilly").delete()
-	关联
-		正向 Person.objects.get(id=1).book.remove(obj)
-		逆向 book.person_set.remobe(obj)
-		
-改:
-	1:Book.objects.filter().update(name=xxx)
-	2:先查询 改属性 在save
-查找:
-	必须是单个
-		Student.objects.get(id = 8286) try/catch
-	所有
-		Student.objects.all() 		得到所有
-	过滤
-		Student.objects.filter(.条件.)  得到指定属性的对象
-		Student.objects.exclude()  排除满足条件的
-	排序
-		Student.objects.order_by("id | -id")
-		Student.objects.filter(.条件.).order_by
-	限制 切片
-		limit(0,100) 、offset(10)、[0:10]
-	数量
-		count()
-		
-	关心属性	
-		value("name")
-		value_list("","")
-		
-	聚合函数 
+	增删改查
+	增:
+		obj.save()
+		Object.create(name=,age=)
+		关联
+			正向 person.book.add(book)
+			逆向 book.person_set.add(person)
+	删:
+		Publisher.objects.get(name="O'Reilly").delete()
+		关联
+			正向 Person.objects.get(id=1).book.remove(obj)
+			逆向 book.person_set.remobe(obj)
+			
+	改:
+		1:Book.objects.filter().update(name=xxx)
+		2:先查询 改属性 在save
+	查找:
+		必须是单个
+			Student.objects.get(id = 8286) try/catch
+		所有
+			Student.objects.all() 		得到所有
+		过滤
+			Student.objects.filter(.条件.)  得到指定属性的对象
+			Student.objects.exclude()  排除满足条件的
+		排序
+			Student.objects.order_by("id | -id")
+			Student.objects.filter(.条件.).order_by
+		限制 切片
+			limit(0,100) 、offset(10)、[0:10]
+		数量
+			count()
+			
+		关心属性	
+			value("name")
+			value_list("","")
+			
+		聚合函数 
 		Avg Max Min Count
 		Book.objects.aggregate(Avg("age"),Count("name"),max_Money = Max("count"))
 			=>{
@@ -121,27 +143,27 @@ class USerMessage(models.Modal):
 			
 		表关联 __ 双下划线
 		Author.objects.filter().annotate(min_price=Min("book__price"),max_price = Max("book__price"))
+				
+		分组Gorup By
+			班级人  按age划分
+			Student.objects.values("age").annotate(count=Count("age"))
+			分为两步
 			
-	分组Gorup By
-		班级人  按age划分
-		Student.objects.values("age").annotate(count=Count("age"))
-		分为两步
-		
-		
-	条件
-		id = 1;  范围
-		id__gt = 1; id>=1 范围
-		id__lt = 1; id<=1 范围
-		(id__lt=10,id__gt=1) 1<=id<=10 范围
-		id__in = [1,2,3] 范围
-		id__range = [1,10] 范围
-		name__contains = "ZZh" 包含
-		name__icontains = "ZZH"包含 大小写不敏感
-		startswith，istartswith, endswith, iendswith
-		name__regex = r""  正则表达式
-		publish_date__date = datetime.date(2018,5,9)日期
-		生日__year = 1993  时间
-			mouth day week_day hour minute second
+			
+		条件
+			id = 1;  范围
+			id__gt = 1; id>=1 范围
+			id__lt = 1; id<=1 范围
+			(id__lt=10,id__gt=1) 1<=id<=10 范围
+			id__in = [1,2,3] 范围
+			id__range = [1,10] 范围
+			name__contains = "ZZh" 包含
+			name__icontains = "ZZH"包含 大小写不敏感
+			startswith，istartswith, endswith, iendswith
+			name__regex = r""  正则表达式
+			publish_date__date = datetime.date(2018,5,9)日期
+			生日__year = 1993  时间
+				mouth day week_day hour minute second
 			
 ```
 	
@@ -182,7 +204,7 @@ ForeignKey
 
 	DateField ([auto_now], [auto_now_add])日期字段
 
-	DateTimeField 时间日期字段,接受跟 DateField 一样的额外选项
+	DateTimeField 时间日期字段,接受跟 DateField 一样的额外选项 年月日 时分秒
 
 	EmailField 一个能检查值是否是有效的电子邮件地址的CharField 
 
