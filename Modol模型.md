@@ -51,7 +51,7 @@ class USerMessage(models.Modal):
 	```
 	属性如果传递的是函数 只需要传递地址
 		def up_to(req,imgF):
-			return XX
+			return "icons/%Y/%h/%m"
 		from datetime import datetime
 		//datetime.new()
 		ImageField(upload_to=up_to,default = datetime.new)

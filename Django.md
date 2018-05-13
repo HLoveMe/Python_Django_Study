@@ -35,6 +35,9 @@
 	* pyCharm Tools -> Run manang.py Task
 	* startapp AAA
 	* settings.md 指明App
+	
+* 时区设置
+	* Setting.md
 * 模型操作
 	* 模型创建和数据库操作  Modol模型.md
 	* 模型和网页数据填充  模板文件.md
@@ -90,4 +93,4 @@
 		继承django User
 	```
 	
-
+* 后台管理Xadmin [Xadmin.md]

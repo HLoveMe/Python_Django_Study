@@ -53,6 +53,15 @@
 		    os.path.join(BASE_DIR,"common"),jq...
 		]
 	```
+* 时区设置
+	
+	```
+	LANGUAGE_CODE = 'zh-Hans'
+
+	TIME_ZONE = 'Asia/Shanghai'
+
+	USE_TZ = False
+	```
 * Media 配置
 
 	```
