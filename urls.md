@@ -57,7 +57,6 @@
 	urlpatterns 合并
 		urlpatterns = [
 				url(r'^admin/', admin.site.urls),
-				url(r'user/',APPurlpatterns),
 				url(r"email/",include([
 					url(r"^delete/",action),
 					url(r"^read/",action),
