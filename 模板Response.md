@@ -28,20 +28,25 @@
 	* 内容渲染渲染
 
 		```
-		1:手动
+		1:手动0
 		from django.template import Context, Template 
 			t = Template('My name is {{ name }}.') 
 			c = Context({'name': 'nowamagic'}) 
 			u"S" = t.render(c)
 			HttpResponse(t.render(c))
 		
-		2:手动
+		2:手动A
 		from django.template import RequestContext, loader
 			tem = loader.get_template("htmlpath.html")
 			context = RequestContext(request,content={},...)
 			u"S" = tem.render(context)
 			response = HttpResponse(tem.render(context))
 			
+		2:手动B
+			from django.template.response import TemplateResponse
+				集成手动A多个步骤
+				推荐 render render_to_resoponse
+				
 		3：快速（render 是render_to_response 全新的方式）
 			return render_to_response('blog_add.html',{'blog': blog, 'form': form, 'id': id, 'tag': tag},
                           context_instance=RequestContext(request))
@@ -131,4 +136,39 @@
 			引擎名称 using=None
 	)
 	```
+	
+	* SimpleTemplateResponse | TemplateResponse
+
+		```
+		SimpleTemplateResponse
+			__init__(template, context=None, content_type=None, status=None, charset=None, using=None)
+				 template 模板
+				 context上下文
+				 content_type = 内容格式  [Content-Type:content_type]
+			    staus 状态码
+			    charset 字符集
+			    using 渲染引擎
+			resolve_template(template)
+				通过 template名字 得到Template实例
+			resolve_context(context)
+				预处理即将用于渲染模板的上下文数据
+			add_post_render_callback()
+				添加一个渲染之后调用的回调函数。
+				这个钩子可以用来延迟某些特定的处理操作（例如缓存）到渲染之后。
+				def my_view(request):
+				   response = TemplateResponse(request, 'mytemplate.html', {})
+				   //创建 但是还没渲染
+				   //my_render_callback 传递一个reponse实例
+				   //如果已经渲染 回调会被立即执行
+			      response.add_post_render_callback(my_render_callback)
+				   return response
+			render()
+				渲染
+				
+		TemplateResponse	
+			__init__(self, request, template, context=None, content_type=None,
+            status=None, current_app=_current_app_undefined, charset=None,
+            using=None):
+            
+		```
 

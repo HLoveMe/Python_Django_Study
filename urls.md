@@ -24,9 +24,11 @@
 			A:r"^user/$"
 			B:r"^user/[0-9]{4}/[0-9]{3}/$"  
 			C:r"^user/(?P<name>[a-zA-Z]+)/$"
+			D:r"^user/$"   url = "/user?a=1&b=3"
 				A(reques):pass
 				B(request,aa,bb):pass
 				C:(request,name=""):pass
+				D:request.GET.get("a")
 		View:
 			函数视图 def A(req):pass
 			路径视图 "app.xx.oo.funcname"
@@ -57,7 +59,6 @@
 	urlpatterns 合并
 		urlpatterns = [
 				url(r'^admin/', admin.site.urls),
-				url(r'user/',APPurlpatterns),
 				url(r"email/",include([
 					url(r"^delete/",action),
 					url(r"^read/",action),

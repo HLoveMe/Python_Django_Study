@@ -71,7 +71,7 @@ class USerMessage(models.Modal):
 
 	```
 操作器
-	Students.objects | stu.XX_set
+		Students.objects | stu.XX_set
 多表关联
 		逆向查询  obj.[表名_set].all()
 	一对多
@@ -80,24 +80,40 @@ class USerMessage(models.Modal):
 		正向 t.students.all()  老师查找学生
 		逆向 s.teacher_set.all() 学生查找老师
 事务 (尽量不要捕获异常)
-	* Setting 事务配置
+		* Setting 事务配置
 	
-	1:ATOMIC_REQUESTS  = True
-		> 所有web都开启事务  开销大
-		> 放水水 @transaction.non_atomic_requests
-	2:@transaction.atomic
-		> 指定某个方法开启事务
-	3:上下文
-		from django.db import transaction
-		def updateuser(request):
-			...
-			with transaction.atomic():
+		1:ATOMIC_REQUESTS  = True
+			> 所有web都开启事务  开销大
+			> 放水水 @transaction.non_atomic_requests
+		2:@transaction.atomic
+			> 指定某个方法开启事务
+		3:上下文
+			from django.db import transaction
+			def updateuser(request):
 				...
-			
-	增删改查
+				with transaction.atomic():
+					...
+				
+	QuerySet查询出来的都是该对象
+		支持便利 
+		支持pickle到本地
+		支持链式操作
+		
+		.exists()是否有记录
+		[:10]切片 可以节省内存 或 reverse
+		list(qs) 作为list
+		.query.__str__() 查看sql语句
+		
+		
+	增删改查 基于QuerySet
 	增:
-		obj.save()
-		Object.create(name=,age=)
+		创建
+			1:obj = Author(name="WeizhongTu", email="tuweizhong@163.com")
+			2:obj = Author() twz.name="WeizhongTu"
+			3:obj = Author.create(name=,age=)
+			4:obj = Author.objects.get_or_create(name="WeizhongTu", email="tuweizhong@163.com")
+		保存
+			obj.save()
 		关联
 			正向 person.book.add(book)
 			逆向 book.person_set.add(person)
@@ -111,44 +127,92 @@ class USerMessage(models.Modal):
 		1:Book.objects.filter().update(name=xxx)
 		2:先查询 改属性 在save
 	查找:
-		必须是单个
+		单个 （必须是一个结果）
 			Student.objects.get(id = 8286) try/catch
 		所有
 			Student.objects.all() 		得到所有
 		过滤
 			Student.objects.filter(.条件.)  得到指定属性的对象
 			Student.objects.exclude()  排除满足条件的
+		去重
+			distinct()
 		排序
+			Student.objects.order_by()使用Model指定的排序规则
 			Student.objects.order_by("id | -id")
 			Student.objects.filter(.条件.).order_by
 		限制 切片
-			limit(0,100) 、offset(10)、[0:10]
+			limit(0,100) 、offset(10)、[0:10]  reverse
 		数量
 			count()
 			
+		extra  实现 别名，条件，排序
+			.extra(select={"别名":"名称"})
+			
+		排除
+			.defer("name") 查询结果中排除某些字段
+		反转|倒叙
+			切片不知道 负数
+			reverse()
+			Person.objects.all().reverse()[:2] 去最后2条
+			
 		关心属性	
-			value("name")
-			value_list("","")
+			values("name","qq") 
+				[{"name":1,"qq":2},...]
+			values_list("","") //一个属性 或者多个 
+				values_list("name","email") //多个
+					[(name,email),(name,email),...]
+				values_list("name",flat=True) //单个
+					[name,name,,...]
+		关心属性
+			.only("name")  =>[Modol,Model,..]
 			
 		聚合函数 
-		Avg Max Min Count
-		Book.objects.aggregate(Avg("age"),Count("name"),max_Money = Max("count"))
-			=>{
-				age_avg:100,
-				max_Money:8286
-			}
-		annotate 聚合 (为结果每一项 都加上一个属性（聚合结果)）
-			Book.objects.annotate(Count('authors') | au_co=Count('authors'))
-			[{authors_count:11|au_co:11}]
+			from django.db.models import Avg
+			Avg Max Min Count
+			Book.objects.aggregate(Avg("age"),Count("name"),max_Money = Max("count"))
+				=>{
+					age_avg:100,
+					max_Money:8286
+				}
+			annotate 聚合 (为结果每一项 都加上一个属性（聚合结果)）
+				Article.objects.values("author").annotate(Count('authors') | au_co=Count('authors'))
+				每个作者的文章数
+					1:分组
+					2:在组中进行其他的数据统计（annotate）
+				[{...,authors_count:11|au_co:11},{}]
 			
-		表关联 __ 双下划线
-		Author.objects.filter().annotate(min_price=Min("book__price"),max_price = Max("book__price"))
+			表关联 __ 双下划线
+				Author.objects.filter().annotate(min_price=Min("book__price"),max_price = Max("book__price"))
+				
+			自定义聚合功能
+				https://code.ziqiangxuetang.com/django/django-queryset-advance.html
 				
 		分组Gorup By
 			班级人  按age划分
 			Student.objects.values("age").annotate(count=Count("age"))
 			分为两步
-			
+		
+		多表关联查询优化 (减少对数据库的查询次数)
+			一对一 和 多对一  在(多,一 "前")的一方查询 并把关联的 一 查询出来 
+				Author  1:n  Article(author外键)
+				一般
+					art = Article.objects.get(id = 8286) 会查询一次得到Article
+					art.author.id 再次查询得到author
+				优化 一次把关联的对象查询出来				
+					Alticle.object.get(id=8286).select_related("author")
+					
+			一对多 多对多 
+			 	Article(tags 多对多) n:n Tag
+			 	一般
+			 		arts = Article.objects.all()[:3]
+			 		for ar in arts:
+			 			print(ar.tags.all())
+			 			
+			 	优化
+			 		articles = Article.objects.all().prefetch_related('tags')[:3]
+					for a in articles:
+						print a.title, a.tags.all()
+			 	
 			
 		条件
 			id = 1;  范围
@@ -165,7 +229,7 @@ class USerMessage(models.Modal):
 			生日__year = 1993  时间
 				mouth day week_day hour minute second
 			
-```
+	```
 	
 * 参数 属性 说明	
 [参数说明](https://www.cnblogs.com/shizhengwen/p/6588834.html)
