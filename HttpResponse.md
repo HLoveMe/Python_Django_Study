@@ -111,16 +111,6 @@ from django.shortcuts import render
 		
 		```
 			json格式的数据
-			JsonResponse(
-				data, python字典
-				encoder=DjangoJSONEncoder,Json解析器
-				safe=True,
-					默认为True 只允许dict 实例
-					False 可以传递任何对象进行序列化
-				json_dumps_params=None,
-					con = json.dumps(data,这里的参数)
-				**kwargs)
-				
 			[JSonResponse.md]
 		```
 	* redirect
