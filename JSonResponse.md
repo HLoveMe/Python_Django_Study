@@ -28,6 +28,7 @@
 				**kwargs
 					Response 其他__init__参数
 				)
+		return JSonRequest(json.dumps({}))
 	```
 	
 * 数据格式化
