@@ -6,30 +6,43 @@
 class ContextMixin:pass 
 	提供模板 渲染参数 的功能
 	def get_context_data(self, **kwargs):pass
+		return content
 	
 class View(object):
+	生成Response 的Action
+
 	提供请求方式限制
-	def http_method_not_allowed(self, request, *args, **kwargs):
+	http_method_names = []
+	或者 def http_method_not_allowed(self, request, *args, **kwargs):
 	变为函数视图
 	@classonlymethod
     def as_view(cls, **initkwargs):
+    	pass
+    def options(self, request, *args, **kwargs):
+    	生成response 设置一些默认参数
+    		Allow | Content-Length ...
+    	return response
+    	pass
     
-class TemplateResponseMixin:pass
+class TemplateResponseMixin:(object):
+	提供一种模板转换方式
 	template_name = None 指定模板
     template_engine = None 指定渲染引擎
-    response_class = TemplateResponse
-    content_type = None
+    response_class = TemplateResponse 模板Response类
+    content_type = None response内容类型
 	模板配置
 	def get_template_names(self):return [template_name]
 	模板渲染
 	def render_to_response(self, context, **response_kwargs):
+	
+	
 ///	
 class SingleObjectMixin(ContextMixin):
-	单个model
+	单个model 和 提供渲染参数
     model = None 类型
-    queryset = None
+    queryset = None 指定查询对象  model | queryset指定一个
     slug_field = 'slug' 
-    context_object_name = None 指定上下面中参数{key:object}
+    context_object_name = None 指定上下面中参数{"context_object_name":Model}
     slug_url_kwarg = 'slug'
     pk_url_kwarg = 'pk' 默认参数名称 url匹配参数
     query_pk_and_slug = False
@@ -42,8 +55,15 @@ class SingleObjectMixin(ContextMixin):
     	自定义查询
     def get_queryset(self):pass
     	查询all() 可进行过滤等操作
-    
-class BaseDetailView(SingleObjectMixin, View):
+    	 if self.queryset is None:
+            if self.model:
+                return self.model._default_manager.all()
+            else:
+                raise ImproperlyConfigured（)
+        return self.queryset.all()
+  
+ class BaseDetailView(SingleObjectMixin, View):
+ 	返回Response
 	def get(self, request, *args, **kwargs):
 		return response
 		
@@ -55,14 +75,17 @@ class SingleObjectTemplateResponseMixin(TemplateResponseMixin):
 ///
 class MultipleObjectMixin(ContextMixin):
     allow_empty = True 容许为空
-    queryset = None
+    queryset = None 指定查询对象    model | queryset指定一个
     model = None 模型
     paginate_by = 10  分页个数
     paginate_orphans = 0
-    context_object_name = None 结果在上下文中的key{key:res}
+    context_object_name = None 结果在上下文中的key{"context_object_name":res}
     paginator_class = Paginator
     page_kwarg = 'page'  页码参数名
     ordering = None   是否倒叙
+    
+    def get_queryset(self):
+    	pass
    
  class MultipleObjectTemplateResponseMixin(TemplateResponseMixin):
  	template_name_suffix = '_list'
@@ -70,7 +93,7 @@ class MultipleObjectMixin(ContextMixin):
  		pass
  
 class BaseListView(MultipleObjectMixin, View):
- 	def get():
+ 	def get(self, request, *args, **kwargs):
 	 	return response
 ///
 ```
@@ -120,16 +143,17 @@ class BaseListView(MultipleObjectMixin, View):
 
 	```
 	class RedirectView{
-		permanent = False
-		url = None
-   		pattern_name = None
-   		query_string = False
+		permanent = False  是否为永久条301 302
+		url = ' # 要跳转的网址
+   		pattern_name = None 不指定url  使用这个参数 反向解析url
+   		query_string = False  是否传递GET的参数到跳转网址
     }
     url(r'^go-to-django/$', RedirectView.as_view(url=., permanent=.), name='go-to-django'),
 	```
 
 * DetailView(SingleObjectTemplateResponseMixin, BaseDetailView): 仅仅展示一条数据
-
+	![](./SingleV.png)
+	
 	```
 	1：创建子类
 	2：指定模板 参数指定
@@ -176,9 +200,10 @@ class BaseListView(MultipleObjectMixin, View):
 		
 	```
 
-	![](./SingleV.png)
+
 	
 * class ListView(MultipleObjectTemplateResponseMixin, BaseListView):
+	![](./ListV.png)
 
 	```
 	1：创建子类
@@ -215,4 +240,4 @@ class BaseListView(MultipleObjectMixin, View):
         	参数获取 self.kwargs.xxx
         	return context 
 	```
-	![](./ListV.png)
+	
