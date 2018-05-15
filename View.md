@@ -15,7 +15,7 @@ class View(object):
 	http_method_names = []
 	或者 def http_method_not_allowed(self, request, *args, **kwargs):
 	变为函数视图
-	@classonlymethod
+	 @classonlymethod
     def as_view(cls, **initkwargs):
     	pass
     def options(self, request, *args, **kwargs):
@@ -23,6 +23,12 @@ class View(object):
     		Allow | Content-Length ...
     	return response
     	pass
+    	
+    def dispatch(self, request, *args, **kwargs):
+    	//不需要重写
+    	//根据你的请求方法 GET / Post /UPdate  来调用对应方法
+    	def get(self, request, *args, **kwargs):pass return sponse
+    	def post(self, request, *args, **kwargs):pass rerurn response
     
 class TemplateResponseMixin:(object):
 	提供一种模板转换方式
@@ -63,7 +69,7 @@ class SingleObjectMixin(ContextMixin):
         return self.queryset.all()
   
  class BaseDetailView(SingleObjectMixin, View):
- 	返回Response
+ 	自定义Get返回Response
 	def get(self, request, *args, **kwargs):
 		return response
 		
@@ -93,6 +99,7 @@ class MultipleObjectMixin(ContextMixin):
  		pass
  
 class BaseListView(MultipleObjectMixin, View):
+ 	自定义Get
  	def get(self, request, *args, **kwargs):
 	 	return response
 ///
