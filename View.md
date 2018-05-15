@@ -10,7 +10,9 @@ class ContextMixin:pass
 	
 class View(object):
 	生成Response 的Action
-
+	继承View 事件流程
+		as_view()->options配置 -> 通过request.method调用对应 （get/post）方法返回response
+		
 	提供请求方式限制
 	http_method_names = []
 	或者 def http_method_not_allowed(self, request, *args, **kwargs):
@@ -31,16 +33,23 @@ class View(object):
     	def post(self, request, *args, **kwargs):pass rerurn response
     
 class TemplateResponseMixin:(object):
-	提供一种模板转换方式
+	提供一种模板转换方式 继承这个就是需要渲染模板
+	修改 | 继承类包含render_to_response 改变默认行为
+	
 	template_name = None 指定模板
     template_engine = None 指定渲染引擎
     response_class = TemplateResponse 模板Response类
     content_type = None response内容类型
 	模板配置
 	def get_template_names(self):return [template_name]
-	模板渲染
+	模板渲染  这里需要在get/post 里面调用
 	def render_to_response(self, context, **response_kwargs):
 	
+class TemplateView(TemplateResponseMixin, ContextMixin, View):
+	重写View 的事件分配GET任务
+	def get():
+		调用 TemplateResponseMixin.render_to_response
+		pass 
 	
 ///	
 class SingleObjectMixin(ContextMixin):
@@ -70,8 +79,9 @@ class SingleObjectMixin(ContextMixin):
   
  class BaseDetailView(SingleObjectMixin, View):
  	自定义Get返回Response
-	def get(self, request, *args, **kwargs):
-		return response
+	  def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
 		
 class SingleObjectTemplateResponseMixin(TemplateResponseMixin):
 	template_name_field = None
