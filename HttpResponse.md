@@ -3,6 +3,7 @@
 响应    [Response](https://www.cnblogs.com/scolia/p/5635546.html)
 
 > from django.http import HttpResponse,HttpResponseRedirect
+> from django.template.response import TemplateResponse
 
 ```
 每一个request 都要进行对于的响应
@@ -51,25 +52,49 @@ from django.shortcuts import render
 ```
 
 * 函数 类 说明
-	* HttpResponse
+	* HttpResponseBase 
+	
+		```
+		status_code = 200
+	    def __init__(self, content_type=None, status=None, reason=None, charset=None):
+	    	content_type = 内容格式  [Content-Type:content_type]
+	    	staus 状态码
+	    	reason
+	    	charset 字符集
+	    	
+	    def setdefault(self, key, value):
+	    def __delitem__(self, header):
+	    def __setitem__(self, header, value):
+	    def __getitem__(self, header):
+	    def get(self, header, alternate=None):
+	    def items(self):
+	    	请求头信息 操作
+	    
+	    def set_cookie(self, key, value='', max_age=None, expires=None, path='/',
+                   domain=None, secure=False, httponly=False):
+       def delete_cookie(self, key, path='/', domain=None):
+	    	cookies 操作
+	    	
+	    def write(self, content):
+	    def flush(self):
+	    	Response内容操作
+		```
+	* HttpResponse(HttpResponseBase)
 	
 		```
 		字符串拼接响应内容
+		streaming = False
 		init
-			content：表示返回的内容，字符串类型
-			charset：表示response采用的编码字符集，字符串类型
-			status_code：响应的HTTP响应状态码
-			content-type：指定输出的MIME类型
-			
-		write(content)：以文件的方式写
-		flush()：以文件的方式输出缓存区
-		set_cookie(key, value='', max_age=None, expires=None)：设置Cookie
-Dome:
-		t1 = loader.get_template('polls/index.html')
-    context = RequestContext(request, {'h1': 'hello'})
-    return HttpResponse(t1.render(context))
+			content：表示返回的内容，字符串类型 u""
+			*args HttpResponseBase __init__
+			**kwargs HttpResponseBase __init__
+		Dome:
+			t1 = loader.get_template('polls/index.html')
+    		context = RequestContext(request, {'h1': 'hello'})
+    		return HttpResponse(t1.render(context))
 		
 		```
+	* SimpleTemplateResponse
 	* TemplateResponse
 		* [模板Response.md]
 		
@@ -95,6 +120,8 @@ Dome:
 				json_dumps_params=None,
 					con = json.dumps(data,这里的参数)
 				**kwargs)
+				
+			[JSonResponse.md]
 		```
 	* redirect
 		
