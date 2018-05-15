@@ -137,10 +137,11 @@ class USerMessage(models.Modal):
 		去重
 			distinct()
 		排序
+			Student.objects.order_by()使用Model指定的排序规则
 			Student.objects.order_by("id | -id")
 			Student.objects.filter(.条件.).order_by
 		限制 切片
-			limit(0,100) 、offset(10)、[0:10]
+			limit(0,100) 、offset(10)、[0:10]  reverse
 		数量
 			count()
 			
@@ -149,10 +150,11 @@ class USerMessage(models.Modal):
 			
 		排除
 			.defer("name") 查询结果中排除某些字段
-		反转
+		反转|倒叙
 			切片不知道 负数
 			reverse()
 			Person.objects.all().reverse()[:2] 去最后2条
+			
 		关心属性	
 			values("name","qq") 
 				[{"name":1,"qq":2},...]
@@ -161,6 +163,8 @@ class USerMessage(models.Modal):
 					[(name,email),(name,email),...]
 				values_list("name",flat=True) //单个
 					[name,name,,...]
+		关心属性
+			.only("name")  =>[Modol,Model,..]
 			
 		聚合函数 
 			from django.db.models import Avg
@@ -171,11 +175,17 @@ class USerMessage(models.Modal):
 					max_Money:8286
 				}
 			annotate 聚合 (为结果每一项 都加上一个属性（聚合结果)）
-				Book.objects.annotate(Count('authors') | au_co=Count('authors'))
-				[{authors_count:11|au_co:11}]
+				Article.objects.values("author").annotate(Count('authors') | au_co=Count('authors'))
+				每个作者的文章数
+					1:分组
+					2:在组中进行其他的数据统计（annotate）
+				[{...,authors_count:11|au_co:11},{}]
 			
 			表关联 __ 双下划线
 				Author.objects.filter().annotate(min_price=Min("book__price"),max_price = Max("book__price"))
+				
+			自定义聚合功能
+				https://code.ziqiangxuetang.com/django/django-queryset-advance.html
 				
 		分组Gorup By
 			班级人  按age划分
