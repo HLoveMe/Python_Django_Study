@@ -52,7 +52,7 @@
 			output_type(Optional|string)-serialize type. 默认“raw”原始数据，即返回list或dict
 				raw 将list或dict中的特殊对象序列化后输出为list或dict
 				dict 同raw
-				json  作为json
+				json  作为str
 			include_attr(Optional|(list, tuple))-只序列化 include_attr 列表里的字段。默认为 None
 			exclude_attr(Optional|(list, tuple))-不序列化 exclude_attr 列表里的字段。默认为 None
 				include_attr |  exclude_attr = (xx,oo,..., foreign=True,..)
@@ -69,12 +69,46 @@
 	2:JsonResponse
 		return JsonResponse({"data":serializer(Country.objects.all(),output_type="raw")})
 		
-	3:View
-		from dss.Mixin import JsonResponseMixin
-		from django.views.generic import DetailView
-		class TestView(JsonResponseMixin, DetailView):
-	    	model = Article
-	    	datetime_type = 'string'
-    		pk_url_kwarg = 'id'
-    	url(r"^detail/?<P>/d+/$",as_view())
+	3:View(dss.Mixin)
+		JsonResponseMixin
+			主要是重写 render_to_response
+			该方法会被DetailView的get调用,达到替换原先TemplateResponse效果
+			
+			from dss.Mixin import JsonResponseMixin
+			from django.views.generic import DetailView
+			class TestView(JsonResponseMixin, DetailView):
+		    	model = Article
+		    	datetime_type = 'string'
+	    		pk_url_kwarg = 'id'
+	    		用作单个信息查询
+	    		
+	    		
+	    	url(r"^detail/?<P>/d+/$",as_view())
+	    	
+	    MultipleJsonResponseMixin(JsonResponseMixin)
+	    	主要是重写 render_to_response
+			该方法会被DetailView的get调用,达到替换原先TemplateResponse效果	    	class TestView(MultipleJsonResponseMixin, ListView):
+			    model = Article
+			    query_set = Article.objects.all()
+			    paginate_by = 1
+			    datetime_type = 'string'
+				多条数据插叙
+			
+				# urls.py
+				urlpatterns = patterns('',
+			    	url(r'^test/$', TestView.as_view()),
+				)
+				
+		FormJsonResponseMixin(JsonResponseMixin):
+			CreateView、UpdateView、FormView
+			class TestView(FormJsonResponseMixin, UpdateView):
+			    model = Article
+			    datetime_type = 'string'
+			    pk_url_kwarg = 'id'
+	```
+	
+* 实例
+	
+	```
+	JsonResponse(serializer(Province.objects.filter(country=country).all(),exclude_attr=("country_id",)),safe=False)
 	```
