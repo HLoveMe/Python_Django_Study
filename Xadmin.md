@@ -58,12 +58,19 @@
 		        },
 		      ...
 				]
-			refresh_times = (3, 5)提供一个自动刷新列表的功能 2s 或者5s
-   		 	pass
+			refresh_times = (3, 5)提供一个自动刷新列表的功能 2s 或者5s 见底部图片
+			show_all_rel_details = True
+   		 	show_detail_fields = []
+   		 		显示属性详情 见下图
+   		 	
+   		 	list_editable = [xx]
+   		 		直接编辑属性 见下图
+   		 	
 		xadmin.site.register(EmailVerify,EmailVerifyAdmin);
 	```
-* Xadmin全局配置
-	* 主题修改 (USer App下)
+* Xadmin  配置
+
+	* 主题修改 (USer App下) xadmin.views.BaseAdminView
 	
 		```
 			# _*_ coding: utf-8 _*_
@@ -77,3 +84,54 @@
 			xadmin.site.register(views.BaseAdminView,BaseSetting)
 			
 		```
+	* 站点配置 xadmin.views.CommAdminView
+		
+		```
+			class GlobalSettings(object):
+				site_title="猪猪系统"
+		   	 	site_footer="我的公司"
+		   	 	menu_style="accordion"
+		   	 	
+		   	 xadmin.site.register(CommAdminView,GlobalSettings);
+		```
+	* xadmin.views.ModelAdminView
+	* 。。。。
+
+* Xadmin  View
+
+	![](./adminxImages/views.png)
+	
+	```
+		BaseAdminView: 所有AdminView的基础类，注册在该View上的插件可以影响所有的AdminView.
+
+		CommAdminView:用户已经登录后显示的View，也是所有登陆后View的基础类。该View主要作用是创建了Xadmin的通用元素，例如：系统菜单，用户信息等。插件可以通过注册该View来修改这些信息。
+		
+		ModelAdminView：基于Model的AdminView的基础类，注册的插件可以影响所有基于Model的View。
+		
+		ListAdminView:Model列表页面View。
+		
+		DeleteAdminView:Model删除页面View。
+		
+		DetailAdminView:Model详情页面View。
+		
+		ModelFormAdminView:Model编辑页面View。
+		
+		CreateAdminView:Model创建页面View。
+		
+		UpdateAdminView:Model修改页面View。
+	```
+* Xadmin 插件制作
+	* Action
+	* 过滤器
+
+* 刷新功能
+
+	![SS](./adminxImages/refresh.png)
+	
+* 属性详情
+
+	![](./adminxImages/details.png)
+	
+* 编辑属性
+
+	![](./adminxImages/editable.png)
