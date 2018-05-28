@@ -12,6 +12,7 @@
 		* {% STATIC_URL %}
 		* {% MEDIA_URL %}
 		* {% request %}
+		* {% request.get_host %} ==== get_host()
 		* {% 自定义啊 %}
 * 内置函数
 	

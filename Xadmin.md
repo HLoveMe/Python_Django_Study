@@ -42,6 +42,38 @@
 		from Extra_Apps import xadmin
 		from .models import EmailVerify
 		class EmailVerifyAdmin(object):
+			list_filter =[] 用于指明需要显示的属性
+			search_fields =[] 指定可以用于搜索的属性
+			free_query_filter = True
+			list_export = ('xls', xml', 'json')支持数据导出
+				excel需要安装xlwt.
+			show_bookmarks = True 开启书签
+			list_bookmarks = [
+				{
+				'title': "Female",         # 书签的名称, 显示在书签菜单中
+		        'query': {'gender': True}, # 过滤参数, 是标准的 queryset 过滤
+		        'order': ('-age'),         # 排序参数
+		        'cols': ('first_name', 'age', 'phones'),  # 显示的列
+		        'search': 'Tom'    # 搜索参数, 指定搜索的内容
+		        },
+		      ...
+				]
+			refresh_times = (3, 5)提供一个自动刷新列表的功能 2s 或者5s
    		 	pass
 		xadmin.site.register(EmailVerify,EmailVerifyAdmin);
 	```
+* Xadmin全局配置
+	* 主题修改 (USer App下)
+	
+		```
+			# _*_ coding: utf-8 _*_
+			import xadmin
+			from xadmin import views
+			
+			class BaseSetting(object):
+			    enable_themes=True
+			    use_bootswatch=True
+
+			xadmin.site.register(views.BaseAdminView,BaseSetting)
+			
+		```

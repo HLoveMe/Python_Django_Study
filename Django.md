@@ -3,10 +3,13 @@
 * Pycharm创建Django工程
 * 创建目录
 	* Apps 存放之后所有App 
+		* make Directory as Source root
 	* log 日志目录
 	* media 用户上传图片等目录
 	* static 存放js css 静态图片目录
 	* templates html文件
+	* Extra_apps 放第三方app
+		* make Directory as Source root
 * Apps路径注册为搜索路径
 
 	```
@@ -67,7 +70,7 @@
 			]
 	详细说明 (urls.md)
 	```
-* Request[]
+* Request (Request.md)
 
 * 响应 HttpResponse [HttpResponse.md]
 
