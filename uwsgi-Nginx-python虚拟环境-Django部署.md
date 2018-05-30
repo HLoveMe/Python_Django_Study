@@ -103,9 +103,13 @@
 		
 	nginx 配置或者django文件更新
 		配置更新
-			> cd /etc/nginx/sites-enabled/ ;删除配置
-			> sudo ln -s ~/Django/MuOnlie/conf/online_nginx.conf /etc/nginx/sites-enabled/
-			> 重启
+			路径和之前保持不变
+				> 上传配置
+				> 不需要 cd /etc/nginx/sites-enabled/ ;删除配置
+				> 不需要 sudo ln -s ~/Django/MuOnlie/conf/online_nginx.conf /etc/nginx/sites-enabled/
+				> 重启
+			路径改变
+				执行上面四步
 		文件更新
 			重启 uwsgi
 
@@ -122,5 +126,9 @@
 	nginx
 		/etc/init.d/nginx start;启动
 		sudo /etc/init.d/nginx restart;重启
-		nginx -t检查配置是否正确
+		sudo nginx -t检查配置是否正确
+		
+		关闭
+		ps -ef | grep nginx
+		kill -QUIT pid
 	```
