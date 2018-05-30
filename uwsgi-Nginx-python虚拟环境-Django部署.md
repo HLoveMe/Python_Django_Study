@@ -122,4 +122,5 @@
 	nginx
 		/etc/init.d/nginx start;启动
 		sudo /etc/init.d/nginx restart;重启
+		nginx -t检查配置是否正确
 	```
