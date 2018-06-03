@@ -3,10 +3,16 @@
 ```
 1:前提Django能在本地运行
 
+1.5 静态文件搜集
+	* setting 加入 STATIC_ROOT = os.path.join(BASE_DIR,'root|static|随意')
+	* python manage.py collectstatic
+
+1.7 DEBUG = True
+
 2:FileZilla上传到腾讯云服务器
 	》服务器 开放 端口
 	》安装和本地开发一致的Django环境 和 虚拟环境
-	
+
 2-3:以下命令都是虚拟环境中
 
 3:测试
@@ -78,10 +84,12 @@
 			    access_log     /home/ubuntu/Django/MuOnlie/logs/online_access.log;  //访问日志
 			    error_log      /home/ubuntu/Django/MuOnlie/logs/online_error.log; //错误日志
 			    location /media  {
+				    //指向MEDIA_ROOT
 			        alias /home/ubuntu/Django/MuOnlie/media;
 			    }
 			    location /static {
-			        alias /home/ubuntu/Django/MuOnlie/static;
+ 				    //指向STATIC_ROOT
+			        alias /home/ubuntu/Django/MuOnlie/static; 
 			    }
 			    location / {
 			        uwsgi_pass  django;
