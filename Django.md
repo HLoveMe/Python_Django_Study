@@ -56,8 +56,16 @@
 	前段引用2 推荐
 		'django.template.context_processors.media'
 		{% MEDIA_URL "a/x/p.jpg" %}
-		
-	 
+	
+	
+	开发时
+	
+	from django.conf import settings
+	from django.views.static import serve
+	if settings.DEBUG:
+	    urlpatterns.append(url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}))
+	    
+	发布时 由nginx管理静态文件
 	```
 * 模板文件配置
 	* settings.md
@@ -126,5 +134,6 @@
 		USer 操作
 		认证 登入 退出 刷新 获取当前登入USer
 	```
+	* 用户权限 [User_Permission.md] 
 	
 * 后台管理Xadmin [Xadmin.md]
