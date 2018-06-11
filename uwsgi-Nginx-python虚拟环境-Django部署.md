@@ -109,7 +109,7 @@
 				> 不需要 sudo ln -s ~/Django/MuOnlie/conf/online_nginx.conf /etc/nginx/sites-enabled/
 				> 重启
 			路径改变
-				执行上面四步
+				执行上面四步rr
 		文件更新
 			重启 uwsgi
 
