@@ -28,9 +28,45 @@
 * 静态文件路径配置 static 文件夹路径
 	* Settings.md 静态文件路径配置
 	* js/css/images
+
+	```
+	前提
+	STATIC_URL = '/static/'
+	STATICFILES_DIRS = [
+    	os.path.join(BASE_DIR,'static'),
+	]
+	静态文件加载 1 （静态文件必须在static目录下）
+		<script type="text/javascript" src="/static/js/index.js"></script>
+		
+	静态文件加载 2 （比较灵活）
+		{%load staticfiles %}
+		<script type="text/javascript" src={% static "js/index.js" %}></script>
+	
+	静态文件加载 3 （比较灵活）
+	setting.TEMPLATES.OPTIONS.context_processors
+		加入'django.template.context_processors.static'
+		<link rel="stylesheet" type="text/css" media="screen" href="{{ STATIC_URL }}bbs/style.css">
+	```
 	
 * media文件设置 用户上传文件 [Setting.md]
 	
+	```
+	前段引用1
+		/media/xx/00/.png
+	前段引用2 推荐
+		'django.template.context_processors.media'
+		{% MEDIA_URL "a/x/p.jpg" %}
+	
+	
+	开发时
+	
+	from django.conf import settings
+	from django.views.static import serve
+	if settings.DEBUG:
+	    urlpatterns.append(url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}))
+	    
+	发布时 由nginx管理静态文件
+	```
 * 模板文件配置
 	* settings.md
 	
@@ -94,6 +130,10 @@
 	
 	```
 		继承django User
+		
+		USer 操作
+		认证 登入 退出 刷新 获取当前登入USer
 	```
+	* 用户权限 [User_Permission.md] 
 	
 * 后台管理Xadmin [Xadmin.md]

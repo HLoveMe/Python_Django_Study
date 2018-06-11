@@ -38,6 +38,11 @@
 			verbose_name = "为你的类取个理解的名字"
 			verbose_name_plural = verbose_name 复数形式名称 默认加个 s
 			ordering = "-id" 排序
+			
+			permissions = (
+				("",""),
+				....权限认证 见[Permission.md]
+			)
 			...
 			pass
 		pass
@@ -103,8 +108,7 @@
 		[:10]切片 可以节省内存 或 reverse
 		list(qs) 作为list
 		.query.__str__() 查看sql语句
-		
-		
+				
 	增删改查 基于QuerySet
 	增:
 		创建
@@ -212,6 +216,48 @@
 			 		articles = Article.objects.all().prefetch_related('tags')[:3]
 					for a in articles:
 						print a.title, a.tags.all()
+		
+		F ,Q操作
+			from django.db.models import F,Q, ExpressionWrapper
+			F 针对某个值的操作  容许在不知道值的前提下操作
+			   F (+ -) F
+				修改数量记录
+					Good = Goods.object.get(id=111)
+					Good.count += 1
+					Good.save()
+					这样数据库就会先查询Good 然后在count+=1,在进行保存
+					Good = Goods.object.get(id=111)
+					Good.count = F("count") + 1
+					Good.save()
+					这样就减少数据从查询
+				exam:
+					res = Reporters.objects.all()
+					res.update(count = F("count") + 1)
+					
+					res.update(count = F("count")+F("_count"))
+				说明:
+					上面修改Good的count属性,会更新数据库，但是Good的属性不会被更新。需要再次更新
+						1：Good = Goods.object.get(id=111)
+						2：Good.refresh_from_db()
+					在F之间操作时 如果两者数据格式不对 需要使用ExpressionWrapper
+						ExpressionWrapper(F,F,output_field=DateTimeField())
+					
+					
+					
+			Q 对象的复杂查询 查询条件组合
+				Q(条件查询) | & ~ 产生新的Q对象
+				注意如果同时有Q 和 普通条件  Q 放在最前面 
+					正确：Model.objects.get(Q(name = "xxx"),age=18)
+					错误：Model.objects.get(age=18，Q(name = "xxx"))
+					
+				Model.objects.get(name = "xxx",age = 18)
+				Model.objects.get(Q(name = "xxx"),age=18)
+					name为xxx and age = 18
+					
+				Model.objects.get(
+						Q(name = "xxx")  | Q(email = "xxx"),
+						age=18
+					)
 			 	
 			
 		条件

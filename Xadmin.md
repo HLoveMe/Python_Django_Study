@@ -94,6 +94,17 @@
 		   	 	
 		   	 xadmin.site.register(CommAdminView,GlobalSettings);
 		```
+	* 修改App名称为中文
+	 
+		```
+			APpName.apps文件中
+			class NewsConfig(AppConfig):
+		       name = 'news'
+        		verbose_name = "新闻"
+        	app 下 __init__.py
+        		default_app_config = "news.apps.NewsConfig"
+		
+		```
 	* xadmin.views.ModelAdminView
 	* 。。。。
 
