@@ -106,7 +106,7 @@
 		系统默认的日志路径
 		
 7.文件更新
-	uwsgi 配置更新
+	uwsgi重启 配置更新
 		uwsgi --ini online_uwsgi.ini
 		
 	nginx 配置或者django文件更新
