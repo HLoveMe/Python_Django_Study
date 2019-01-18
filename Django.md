@@ -15,7 +15,12 @@
 	```
 		Settngs 
 		sys.path.append(os.path.join(BASE_DIR,"Apps"))
+		
+		app组注册
 	```
+* 模型
+
+	[Modol模型.md]()
 * Setting数据库配置
 
 	```
